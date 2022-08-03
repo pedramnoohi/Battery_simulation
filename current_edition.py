@@ -48,11 +48,11 @@ A = A[0]
 B = np.dstack((x_basis1, y_basis1))
 B = B[0]
 '''
-    Looping through alll elements in A. being the list of locations of each DOF for the large mesh.
+    Looping through all elements in A. being the list of locations of each DOF for the large mesh.
     Then for each coupled point, loop through each location in B. If the location is the same then do nothing, if 
     they are different add it to a list.
-    At the end of the second loop we checl if the length of list2 is the same as the full length of B (meaning that that DOF does not hare location with
-    B) so taht means its a particle.
+    At the end of the second loop we check if the length of list2 is the same as the full length of B (meaning that that DOF does not share location with
+    B) so that means its a particle.
 '''
 s = -1
 list1 = []
