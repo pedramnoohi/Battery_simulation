@@ -81,11 +81,12 @@ triangles=sk_mesh.get("triangle")
 #this is probabat the problm as the triangls is not based on the mesh but on the mesh.
 #so p and t must be based on the basis and not the mesh itself.
 p=triangles.points
-t=basis.element_dofs.T
+t=triangles.cells
+#t=basis.element_dofs.T
 json_object={}
 
-json_object["p"]=p.tolist()
-json_object["t"]=t.tolist()
+json_object["p"]=A.tolist()
+json_object["t"]=basis.element_dofs.T.tolist()
 
 elec_list=[]
 i=-1
@@ -121,7 +122,7 @@ from skfem.io.json import from_file
 mesh2 = from_file("mesh10.json")
 basis2=Basis(mesh2,e)
 
-basis0 = basis2
+basis0 = basis2.with_element(ElementTriP1())
 diffusivity = basis0.zeros()
 #for s in mesh2.subdomains:
 
@@ -134,6 +135,7 @@ diffusivity = basis0.zeros()
 #getting diffusivity array with corresponding indexes for elements that are in lithium or electrolyte
 for s in mesh2.subdomains:
     diffusivity[basis0.get_dofs(elements=s)] = Diffusivity_coefficient[s]
+
 @BilinearForm
 def laplace1(u,v,w):
     return dot(w["diffusivity"]*grad(u),grad(v))
