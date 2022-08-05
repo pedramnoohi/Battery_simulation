@@ -9,7 +9,7 @@ from skimage.data import binary_blobs
 from nanomesh import Image
 #setup for the mesh
 length=100
-blobs=binary_blobs(length=length, volume_fraction=0.10,seed=2102)
+blobs=binary_blobs(length=length, volume_fraction=0.20,seed=2102)
 plane=Image(blobs)
 #generating the mesh from the plane
 sk_mesh = plane.generate_mesh(opts='q30a10')
