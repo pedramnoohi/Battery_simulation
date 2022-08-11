@@ -71,7 +71,7 @@ M0 = asm(mass, basis)
 theta = 0.5
 A = M0 + theta * L0 * dt
 B = M0 - (1 - theta) * L0 * dt
-
+print(type(A))
 backsolve = splu(A.T).solve
 #initial condition and boundary condition of having 200 units at the bottom of the domain.
 u_init=np.zeros(len(basis.doflocs.prod(0)))
