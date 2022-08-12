@@ -9,7 +9,8 @@ from skimage.data import binary_blobs
 from nanomesh import Image
 from skfem import MeshTri
 from skfem.helpers import dot, grad
-
+import skfem
+import nanomesh
 class Mesh:
 
     '''
@@ -22,14 +23,15 @@ class Mesh:
         self.plane= plane
         self.length=length
 
-    def nano_mesher(self):
+    def nano_mesher(self)->  nanomesh.mesh_container.MeshContainer:
         """
+
         """
         sk_mesh = self.plane.generate_mesh(opts='q30a10')
         sk_mesh.points = (sk_mesh.points) / self.length / 2 - 1
         return sk_mesh
 
-    def skfem_mesher(self):
+    def skfem_mesher(self)->skfem.mesh.mesh_tri_1.MeshTri1:
         """
         """
         triangles=self.nano_mesher().get('triangle')
@@ -50,7 +52,7 @@ class Mesh:
         m = m.with_boundaries({"l": lambda x: x[1] == -1, "r": lambda x: x[0] == 1})
         return m
 
-    def basis(self):
+    def basis(self)->skfem.assembly.basis.cell_basis.CellBasis:
         """
         """
         e=ElementTriP1()

@@ -14,5 +14,5 @@ mesh=Mesh(plane=plane,length=length).skfem_mesher()
 basis=Mesh(plane=plane,length=length).basis()
 
 
-initial=FEM(dt=0.01,t_max=1000,initial_temp=200,mesh=mesh,basis=basis,Diffusivity_coefficient=Diffusivity_coefficient)
+initial=FEM(dt=0.01,t_max=2000,initial_temp=200,mesh=mesh,basis=basis,Diffusivity_coefficient=Diffusivity_coefficient)
 initial.simulate()

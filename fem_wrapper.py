@@ -4,9 +4,11 @@ from scipy.sparse.linalg import splu
 from skfem import *
 from skfem.models.poisson import mass
 from skfem.helpers import dot, grad
+import skfem
 class FEM():
 
-    def __init__(self, dt, t_max, initial_temp, mesh, basis, Diffusivity_coefficient):
+    def __init__(self, dt:float, t_max:float, initial_temp:float, mesh:skfem.mesh.mesh_tri_1.MeshTri1
+                 , basis:skfem.assembly.basis.cell_basis.CellBasis, Diffusivity_coefficient:dict):
         """
         """
         self.Diffusivity_coefficient = Diffusivity_coefficient
@@ -16,7 +18,7 @@ class FEM():
         self.t_max = t_max
         self.initial_temp = initial_temp
 
-    def diffusivity(self):
+    def diffusivity(self)->  np.ndarray:
         """
         """
         diffusivity = self.basis.zero_w()
@@ -24,7 +26,7 @@ class FEM():
             diffusivity[elements] = self.Diffusivity_coefficient[subdomain]
         return diffusivity
 
-    def assembly(self, type):
+    def assembly(self, type:int)->  np.ndarray:
         self.type = type
 
         @BilinearForm
@@ -41,7 +43,7 @@ class FEM():
         if type == 1:
             return B
 
-    def initial_condition(self):
+    def initial_condition(self)->  np.ndarray:
         u_init = np.zeros(len(self.basis.doflocs.prod(0)))
         for ele in self.basis.get_dofs("l").nodal['u']:
             u_init[ele] = 200
@@ -61,7 +63,7 @@ class FEM():
                 u[ele] = self.initial_temp
             yield t, u
 
-    def simulate(self):
+    def simulate(self) :
         from argparse import ArgumentParser
         from pathlib import Path
         from matplotlib.animation import FuncAnimation
