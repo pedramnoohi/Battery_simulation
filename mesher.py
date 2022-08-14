@@ -12,20 +12,26 @@ from skfem.helpers import dot, grad
 import skfem
 import nanomesh
 class Mesh:
-
     '''
     Getting mesh of blobs into nanomesh, then skfem
+    Args:
+        plane(nanomesh.image._plane.Plane): plane with blobs
+        length(int): length of dimension of plane
+    Attributes:
+         plane(nanomesh.image._plane.Plane):stores plane
+         length(int):stores length
     '''
 
     def __init__(self,plane,length):
-        """
-        """
+
         self.plane= plane
         self.length=length
 
     def nano_mesher(self)->  nanomesh.mesh_container.MeshContainer:
         """
-
+        generates nanomesh of blobs and makes it smaller and from -1 to 1
+        returns:
+            sk_mesh(nanomesh.mesh_container.MeshContainer):nanomesh mesh of blobs
         """
         sk_mesh = self.plane.generate_mesh(opts='q30a10')
         sk_mesh.points = (sk_mesh.points) / self.length / 2 - 1
@@ -33,6 +39,9 @@ class Mesh:
 
     def skfem_mesher(self)->skfem.mesh.mesh_tri_1.MeshTri1:
         """
+        Takes nanomesh and converts into skfem. Inputs subdomains into skfem aswell
+        Returns:
+            m(skfem.mesh.mesh_tri_1.MeshTri1):skfem mesh
         """
         triangles=self.nano_mesher().get('triangle')
         p = triangles.points.T
@@ -54,6 +63,10 @@ class Mesh:
 
     def basis(self)->skfem.assembly.basis.cell_basis.CellBasis:
         """
+        Generates cell basis for assembly of FEM
+
+        Returns:
+            basis(skfem.assembly.basis.cell_basis.CellBasis):basis for assembly
         """
         e=ElementTriP1()
         basis=Basis(self.skfem_mesher(),e)

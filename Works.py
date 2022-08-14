@@ -69,10 +69,10 @@ M0 = asm(mass, basis)
 
 #time stepping with crank nicholson scheme
 theta = 0.5
-A = M0 + theta * L0 * dt
-B = M0 - (1 - theta) * L0 * dt
-print(type(A))
-backsolve = splu(A.T).solve
+lhs = M0 + theta * L0 * dt
+rhs = M0 - (1 - theta) * L0 * dt
+print(type(lhs))
+backsolve = splu(lhs.T).solve
 #initial condition and boundary condition of having 200 units at the bottom of the domain.
 u_init=np.zeros(len(basis.doflocs.prod(0)))
 for ele in basis.get_dofs("l").nodal['u']:
@@ -84,7 +84,7 @@ def evolve(t: float,
         for ele in basis.get_dofs("l").nodal['u']:
             u[ele]=200
 
-        t, u = t + dt, backsolve(B @ u)
+        t, u = t + dt, backsolve(rhs @ u)
         for ele in basis.get_dofs("l").nodal['u']:
             u[ele]=200
         yield t, u
